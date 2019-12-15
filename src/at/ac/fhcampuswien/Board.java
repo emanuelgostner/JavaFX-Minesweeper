@@ -12,10 +12,10 @@ import java.util.Arrays;
 
 public class Board {
     public static final int CELL_SIZE = 15;
-    public static final int ROWS = 15;
-    public static final int COLS = 10;
+    public static final int ROWS = 22;
+    public static final int COLS = 20;
     public static final int NUM_IMAGES = 13;
-    public static final int NUM_MINES = 20;
+    public static final int NUM_MINES = 60;
 
     // Add further constants or let the cell keep track of its state.
 
@@ -58,6 +58,8 @@ public class Board {
         for(int i=0; i< randomFields.length;i++) {
             int row = (randomFields[i]-1) / COLS;
             int column = (randomFields[i]-1) % COLS;
+            if (column < 0)
+            	column = 0;
             cells[row][column].update("/res/10.png","covered","mine");
             
             if (row > 0) //topNeighbor
@@ -103,65 +105,144 @@ public class Board {
         return true; // could be a void function as well
     }
     public void checkNeighbors(int row, int column) {
-        if (row > 0) //topNeighbor
-            if (cells[row - 1][column].getNearbyMines()==0 && cells[row-1][column].getSate().equals("covered")) {
-                cells[row - 1][column].update("/res/0.png","uncovered","normal");
-                checkNeighbors(row-1,column);
+        if (row > 0){ //topNeighbor
+        	int neighborRow = row -1;
+        	int neighborCol = column;
+        	Cell neighborCell = cells[neighborRow][neighborCol];
+        	String neighborCellType = neighborCell.getType();
+	        String neighborCellState = neighborCell.getSate();
+	        int neighborCellMines = neighborCell.getNearbyMines();
+        	Cell actualCell = cells[row][column];
+	        int actualCellMines = actualCell.getNearbyMines();
+        	
+            if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+                neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+                checkNeighbors(neighborRow,neighborCol);
             }
+        }
         
         if (row < ROWS - 1){ //bottomNeighbor
-            if(cells[row + 1][column].getNearbyMines()==0 && cells[row+1][column].getSate().equals("covered")){
-                cells[row + 1][column].update("/res/0.png","uncovered","normal");
-               checkNeighbors(row+1,column);
+	        int neighborRow = row +1;
+            int neighborCol = column;
+            Cell neighborCell = cells[neighborRow][neighborCol];
+            String neighborCellType = neighborCell.getType();
+            String neighborCellState = neighborCell.getSate();
+            int neighborCellMines = neighborCell.getNearbyMines();
+            Cell actualCell = cells[row][column];
+            int actualCellMines = actualCell.getNearbyMines();
+            
+            if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+                neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+                checkNeighbors(neighborRow,neighborCol);
             }
         }
         
         if (column < COLS - 1){ //rightNeighbor
-            if(cells[row][column+1].getNearbyMines()==0 && cells[row][column+1].getSate().equals("covered") ){
-                cells[row][column+1].update("/res/0.png","uncovered","normal");
-                checkNeighbors(row,column+1);
+	        int neighborRow = row;
+            int neighborCol = column+1;
+            Cell neighborCell = cells[neighborRow][neighborCol];
+            String neighborCellType = neighborCell.getType();
+            String neighborCellState = neighborCell.getSate();
+            int neighborCellMines = neighborCell.getNearbyMines();
+            Cell actualCell = cells[row][column];
+            int actualCellMines = actualCell.getNearbyMines();
+            
+            if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+                neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+                checkNeighbors(neighborRow,neighborCol);
             }
             if(row > 0) {//top-right
-                if(cells[row-1][column+1].getNearbyMines()==0 && cells[row-1][column+1].getSate().equals("covered") ){
-                    cells[row-1][column+1].update("/res/0.png","uncovered","normal");
-                    checkNeighbors(row-1,column+1);
+            	neighborRow = row-1;
+                neighborCol = column+1;
+                neighborCell = cells[neighborRow][neighborCol];
+                neighborCellType = neighborCell.getType();
+                neighborCellState = neighborCell.getSate();
+                neighborCellMines = neighborCell.getNearbyMines();
+                actualCell = cells[row][column];
+                actualCellMines = actualCell.getNearbyMines();
+                
+                if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+                    neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+                    checkNeighbors(neighborRow,neighborCol);
                 }
             }
             if(row < ROWS-1) {//bottom-right
-                if(cells[row+1][column+1].getNearbyMines()==0 && cells[row+1][column+1].getSate().equals("covered") ){
-                    cells[row+1][column+1].update("/res/0.png","uncovered","normal");
-                    checkNeighbors(row+1,column+1);
+	            neighborRow = row+1;
+                neighborCol = column+1;
+                neighborCell = cells[neighborRow][neighborCol];
+                neighborCellType = neighborCell.getType();
+                neighborCellState = neighborCell.getSate();
+                neighborCellMines = neighborCell.getNearbyMines();
+                actualCell = cells[row][column];
+                actualCellMines = actualCell.getNearbyMines();
+                
+                if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+                    neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+                    checkNeighbors(neighborRow,neighborCol);
                 }
            
             }
         }
         
         if (column > 0) { //left Neighbor
-            if(cells[row][column-1].getNearbyMines()==0 && cells[row][column-1].getSate().equals("covered") ){
-                cells[row][column-1].update("/res/0.png","uncovered","normal");
-                checkNeighbors(row,column-1);
+	        int neighborRow = row;
+            int neighborCol = column-1;
+            Cell neighborCell = cells[neighborRow][neighborCol];
+            String neighborCellType = neighborCell.getType();
+            String neighborCellState = neighborCell.getSate();
+            int neighborCellMines = neighborCell.getNearbyMines();
+            Cell actualCell = cells[row][column];
+            int actualCellMines = actualCell.getNearbyMines();
+            
+            if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+                neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+                checkNeighbors(neighborRow,neighborCol);
             }
             if(row > 0) { //top-left
-                if(cells[row-1][column-1].getNearbyMines()==0 && cells[row-1][column-1].getSate().equals("covered") ){
-                    cells[row-1][column-1].update("/res/0.png","uncovered","normal");
-                    checkNeighbors(row-1,column-1);
-                }
+				neighborRow = row;
+				neighborCol = column-1;
+				neighborCell = cells[neighborRow][neighborCol];
+				neighborCellType = neighborCell.getType();
+				neighborCellState = neighborCell.getSate();
+				neighborCellMines = neighborCell.getNearbyMines();
+				actualCell = cells[row][column];
+				actualCellMines = actualCell.getNearbyMines();
+				
+				if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+					neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+					checkNeighbors(neighborRow,neighborCol);
+				}
             }
             if(row < ROWS-1) { //bottom-left
-                if(cells[row+1][column-1].getNearbyMines()==0 && cells[row+1][column-1].getSate().equals("covered") ){
-                    cells[row+1][column-1].update("/res/0.png","uncovered","normal");
-                    checkNeighbors(row+1,column-1);
-                }
+				neighborRow = row+1;
+				neighborCol = column-1;
+				neighborCell = cells[neighborRow][neighborCol];
+				neighborCellType = neighborCell.getType();
+				neighborCellState = neighborCell.getSate();
+				neighborCellMines = neighborCell.getNearbyMines();
+				actualCell = cells[row][column];
+				actualCellMines = actualCell.getNearbyMines();
+				
+				if ((neighborCellMines== 0 || (actualCellMines == 0 && neighborCellMines > 0 )) && neighborCellState.equals("covered") && neighborCellType.equals("normal")) {
+					neighborCell.update("/res/"+neighborCellMines+".png","uncovered","normal");
+					checkNeighbors(neighborRow,neighborCol);
+				}
             }
         }
     }
     public boolean markCell(int row, int col) {
-        // TODO mark the cell if it is not already marked.
-        if(cells[row][col].getSate().equals("covered"))
-            cells[row][col].update("/res/11.png","marked","normal");
-        else if(cells[row][col].getSate().equals("marked"))
-            cells[row][col].update("/res/10.png","covered","normal");
-        return true;
+	    // TODO mark the cell if it is not already marked.
+	    if (cells[row][col].getSate().equals("covered")){
+		    cells[row][col].update("/res/11.png", "marked", cells[row][col].getType());
+		    if (cells[row][col].getType().equals("mine"))
+		    	this.minesMarked++;
+        }
+        else if(cells[row][col].getSate().equals("marked")) {
+	        cells[row][col].update("/res/10.png", "covered", cells[row][col].getType());
+		    if (cells[row][col].getType().equals("mine") && this.minesMarked > 0)
+		    	this.minesMarked--;
+        }
+            return true;
     }
 
     public void uncoverEmptyCells(Cell cell) {
