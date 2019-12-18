@@ -12,10 +12,10 @@ import java.util.Arrays;
 
 public class Board {
     public static final int CELL_SIZE = 15;
-    public static final int ROWS = 22;
-    public static final int COLS = 20;
+    public static final int ROWS = 20;
+    public static final int COLS = 15;
     public static final int NUM_IMAGES = 13;
-    public static final int NUM_MINES = 60;
+    public static final int NUM_MINES = 5;
 
     // Add further constants or let the cell keep track of its state.
 
@@ -234,13 +234,11 @@ public class Board {
 	    // TODO mark the cell if it is not already marked.
 	    if (cells[row][col].getSate().equals("covered")){
 		    cells[row][col].update("/res/11.png", "marked", cells[row][col].getType());
-		    if (cells[row][col].getType().equals("mine"))
-		    	this.minesMarked++;
+            this.minesMarked++;
         }
         else if(cells[row][col].getSate().equals("marked")) {
 	        cells[row][col].update("/res/10.png", "covered", cells[row][col].getType());
-		    if (cells[row][col].getType().equals("mine") && this.minesMarked > 0)
-		    	this.minesMarked--;
+	        this.minesMarked--;
         }
             return true;
     }
@@ -277,11 +275,11 @@ public class Board {
             }
         }
     }
-
+    
     public Cell[][] getCells() {
         return cells;
     }
-
+    
     /**
      * Computes a random int number between min and max.
      * @param min the lower bound. inclusive.
@@ -292,15 +290,25 @@ public class Board {
         Random random = new Random();
         return random.ints(min,(max+1)).findFirst().getAsInt();
     }
-
+    
     public int getMinesMarked() {
         return minesMarked;
     }
-
+    
     public boolean isGameOver() {
         return gameOver;
     }
-
+    
+    public boolean isGameWon() {
+        for(int i = 0; i < Board.ROWS; i++){
+            for(int j = 0; j < Board.COLS; j++) {
+                if(cells[i][j].getSate().equals("covered") || (cells[i][j].getType().equals("mine") && !cells[i][j].getSate().equals("marked")) || (cells[i][j].getType().equals("normal") && cells[i][j].getSate().equals("marked")))
+                    return false;
+            }
+        }
+        return true;
+    }
+    
     public int getCellsUncovered() {
         return cellsUncovered;
     }

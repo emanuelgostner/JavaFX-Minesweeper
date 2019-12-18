@@ -49,14 +49,15 @@ public class Controller {
                         this.isActive = false;
                         this.message.setText("You stepped into a mine ¯\\_(ツ)_/¯");
                     }
-                    
-
                 } else if (event.getButton() == MouseButton.SECONDARY) {
                     // TODO Mark...
                     this.board.markCell(row, col);
                 }
                 // TODO 1. Check if the player has already won
-
+                if(board.isGameWon()){
+                    this.isActive = false;
+                    this.message.setText("You won, good job!");
+                }
                 // TODO 2. If the game is still in active mode show used mine markers.
                 if(isActive)
                     message.setText(" Marker: " + board.getMinesMarked() + "/" + Board.NUM_MINES);
