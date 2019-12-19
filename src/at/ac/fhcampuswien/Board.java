@@ -232,7 +232,7 @@ public class Board {
     }
     public boolean markCell(int row, int col) {
 	    // TODO mark the cell if it is not already marked.
-	    if (cells[row][col].getSate().equals("covered")){
+	    if (cells[row][col].getSate().equals("covered") && this.minesMarked < NUM_MINES){
 		    cells[row][col].update("/res/11.png", "marked", cells[row][col].getType());
             this.minesMarked++;
         }
